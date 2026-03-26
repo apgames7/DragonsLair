@@ -12,7 +12,7 @@
 			]
 		},
 		{
-			"Name": "GameplayStateTree",
+			"Name": "SunPosition",
 			"Enabled": true
 		}
 	]
