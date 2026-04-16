@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ItemBase.generated.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ItemBase.generated.h"
 
 UCLASS()
 class DRAGONSLAIR_API AItemBase : public AActor
