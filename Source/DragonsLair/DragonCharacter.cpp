@@ -4,6 +4,8 @@
 #include "DragonCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ADragonCharacter::ADragonCharacter()
@@ -41,6 +43,10 @@ void ADragonCharacter::BeginPlay()
 void ADragonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	//Set the weapon visible only after you have picked it up.
+	if (canHaveSword) WeaponMesh->SetHiddenInGame(false); 
+	else WeaponMesh->SetHiddenInGame(true);
 
 }
 
@@ -55,6 +61,9 @@ void ADragonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerJump);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerAttack);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerDash);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ADragonCharacter::PlayerDashStarted);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Canceled, this, &ADragonCharacter::PlayerDashCancelled);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Completed, this, &ADragonCharacter::PlayerDashCompleted);
 	}
 }
 
@@ -91,8 +100,38 @@ void ADragonCharacter::PlayerJump() {
 
 void ADragonCharacter::PlayerAttack() {
 	
-}
-
-void ADragonCharacter::PlayerDash() {
 	
 }
+
+//Player Dash NB NOT WORKING !
+void ADragonCharacter::PlayerDash() {
+	
+	if (canDash) {
+		canDash = false;
+		GetCharacterMovement()->GroundFriction = 0.f;
+		GetCharacterMovement()->AddImpulse(GetMesh()->GetForwardVector().RotateAngleAxis(90.f, {0, 0, 1}) * FVector3d{1500.f, 1500.f, 1500.f});
+		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &ThisClass::PlayerDashEnd, 3.f, false);
+	}	
+}
+
+void ADragonCharacter::PlayerDashEnd() {canDash = true;}
+
+void ADragonCharacter::PlayerDashStarted() {
+	if (canDash) isDashing = true;
+}
+
+void ADragonCharacter::PlayerDashCancelled() {
+	GetCharacterMovement()->GroundFriction = 8.f;	
+}
+
+void ADragonCharacter::PlayerDashCompleted() {
+	GetCharacterMovement()->GroundFriction = 8.f;	
+}
+
+void ADragonCharacter::PlayerDie() {
+	
+	if (GetActorLocation().Z < -20.f) {
+		UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
+	}
+}
+

@@ -51,10 +51,22 @@ public:
 	void PlayerJump();
 	void PlayerAttack();
 	void PlayerDash();
+	void PlayerDashEnd();
+	void PlayerDashStarted();
+	void PlayerDashCancelled();
+	void PlayerDashCompleted();
+	
+	void PlayerDie(); //Restarts level under certain conditons.
 	
 	//Player
 	UPROPERTY(EditAnywhere, Category = "Player")
 	bool inBossFight;
+	UPROPERTY(EditAnywhere, Category = "Player")
+	bool canHaveSword = false;
+	UPROPERTY(EditAnywhere, Category = "Player")	
+	bool canDash = true;
+	UPROPERTY(EditAnywhere, Category = "Player")	
+	bool isDashing = false;
 	
 	//Weapon
 	UPROPERTY(EditAnywhere, Category = "Weapons")
@@ -67,4 +79,5 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadOnly)
 	UObject* StaticCamera;
 	
+	FTimerHandle timerHandle;
 };
