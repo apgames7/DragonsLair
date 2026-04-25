@@ -32,14 +32,7 @@ void AFollowCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//BossRoom->OverlapComponent()
 }
-/*
-void AFollowCamera::OnConstruction(const FTransform& Transform) {
-	Super::OnConstruction(Transform);
-	
-	CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-}
-*/
+
 
 

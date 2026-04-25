@@ -86,14 +86,7 @@ void ADragonCharacter::OnConstruction(const FTransform& Transform) {
 void ADragonCharacter::PlayerMove(const FInputActionValue& ActionValue) {
 	
 	FVector2D ActionVector = ActionValue.Get<FVector2D>();
-	/*
-	if (!ADragonCharacter::inBossFight) {
-		
-		float vLength = sqrt(ActionVector.Y * ActionVector.Y + ActionVector.X * ActionVector.X);
-		FVector3d worldDirection = 
-		{ActionVector.Y / vLength, ActionVector.X / vLength, 0.f};
-		AddMovementInput(worldDirection, 1);
-	}*/
+
 	AddMovementInput(FollowCamera->GetActorForwardVector(), ActionVector.Y);
 	AddMovementInput(FollowCamera->GetActorRightVector(), ActionVector.X);
 	
@@ -108,7 +101,7 @@ void ADragonCharacter::PlayerAttack() {
 	
 }
 
-//Player Dash NB NOT WORKING !
+//Player Dash
 void ADragonCharacter::PlayerDash() {
 	
 	if (canDash) {
