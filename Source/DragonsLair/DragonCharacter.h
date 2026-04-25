@@ -59,14 +59,23 @@ public:
 	void PlayerDie(); //Restarts level under certain conditons.
 	
 	//Player
-	UPROPERTY(EditAnywhere, Category = "Player")
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool inBossFight;
-	UPROPERTY(EditAnywhere, Category = "Player")
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool canHaveSword = false;
-	UPROPERTY(EditAnywhere, Category = "Player")	
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
 	bool canDash = true;
-	UPROPERTY(EditAnywhere, Category = "Player")	
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
 	bool isDashing = false;
+	
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
+	float lives = 1.f;
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
+	float maxLives = 10.f;
+	
+	//Camera
+	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadWrite);
+	AActor* FollowCamera;
 	
 	//Weapon
 	UPROPERTY(EditAnywhere, Category = "Weapons")
@@ -74,10 +83,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	FName HandleSocket;
-	
-	//Camera
-	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadOnly)
-	UObject* StaticCamera;
 	
 	FTimerHandle timerHandle;
 };

@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "FollowCamera.h"
 
 // Sets default values
 ADragonCharacter::ADragonCharacter()
@@ -26,6 +27,7 @@ void ADragonCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 		
+	FollowCamera = UGameplayStatics::GetActorOfClass(GetWorld(), AFollowCamera::StaticClass());
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) {
 		
 		if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer()) {
@@ -47,6 +49,9 @@ void ADragonCharacter::Tick(float DeltaTime)
 	//Set the weapon visible only after you have picked it up.
 	if (canHaveSword) WeaponMesh->SetHiddenInGame(false); 
 	else WeaponMesh->SetHiddenInGame(true);
+	
+	//Kill player
+	PlayerDie();
 
 }
 
@@ -81,17 +86,17 @@ void ADragonCharacter::OnConstruction(const FTransform& Transform) {
 void ADragonCharacter::PlayerMove(const FInputActionValue& ActionValue) {
 	
 	FVector2D ActionVector = ActionValue.Get<FVector2D>();
-	
+	/*
 	if (!ADragonCharacter::inBossFight) {
 		
 		float vLength = sqrt(ActionVector.Y * ActionVector.Y + ActionVector.X * ActionVector.X);
 		FVector3d worldDirection = 
 		{ActionVector.Y / vLength, ActionVector.X / vLength, 0.f};
 		AddMovementInput(worldDirection, 1);
-	}
+	}*/
+	AddMovementInput(FollowCamera->GetActorForwardVector(), ActionVector.Y);
+	AddMovementInput(FollowCamera->GetActorRightVector(), ActionVector.X);
 	
-	
-		
 }
 
 void ADragonCharacter::PlayerJump() {
@@ -109,12 +114,15 @@ void ADragonCharacter::PlayerDash() {
 	if (canDash) {
 		canDash = false;
 		GetCharacterMovement()->GroundFriction = 0.f;
-		GetCharacterMovement()->AddImpulse(GetMesh()->GetForwardVector().RotateAngleAxis(90.f, {0, 0, 1}) * FVector3d{1500.f, 1500.f, 1500.f});
+		GetCharacterMovement()->AddImpulse(GetMesh()->GetForwardVector().RotateAngleAxis(90.f, {0, 0, 1}) * FVector3d{1500.f, 1500.f, 1500.f}, true);
 		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &ThisClass::PlayerDashEnd, 3.f, false);
 	}	
 }
 
-void ADragonCharacter::PlayerDashEnd() {canDash = true;}
+void ADragonCharacter::PlayerDashEnd() {
+	canDash = true;
+	isDashing = false;
+}
 
 void ADragonCharacter::PlayerDashStarted() {
 	if (canDash) isDashing = true;
@@ -122,16 +130,20 @@ void ADragonCharacter::PlayerDashStarted() {
 
 void ADragonCharacter::PlayerDashCancelled() {
 	GetCharacterMovement()->GroundFriction = 8.f;	
+	canDash = true;
+	isDashing = false;
 }
 
 void ADragonCharacter::PlayerDashCompleted() {
 	GetCharacterMovement()->GroundFriction = 8.f;	
+	canDash = true;
+	isDashing = false;
 }
 
 void ADragonCharacter::PlayerDie() {
 	
-	if (GetActorLocation().Z < -20.f) {
-		UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
-	}
+	if (GetActorLocation().Z > -20.f) return;
+	if (lives > 0.f) return;
+	UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
 }
 
