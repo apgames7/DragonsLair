@@ -16,8 +16,8 @@ ADragonCharacter::ADragonCharacter()
 	
 	GetMesh()->SetRelativeRotation(FRotator{0.f, -90.f, 0.f});
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon");
-	WeaponMesh->SetupAttachment(GetMesh());
 	WeaponMesh->SetRelativeRotation(FRotator{0.f, -90.f, 0.f});
+	WeaponMesh->SetupAttachment(GetMesh());
 
 }
 
@@ -25,6 +25,8 @@ ADragonCharacter::ADragonCharacter()
 void ADragonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 	
 		
 	FollowCamera = UGameplayStatics::GetActorOfClass(GetWorld(), AFollowCamera::StaticClass());
@@ -113,8 +115,8 @@ void ADragonCharacter::PlayerDash() {
 }
 
 void ADragonCharacter::PlayerDashEnd() {
-	canDash = true;
 	isDashing = false;
+	canDash = true;
 }
 
 void ADragonCharacter::PlayerDashStarted() {
@@ -123,13 +125,11 @@ void ADragonCharacter::PlayerDashStarted() {
 
 void ADragonCharacter::PlayerDashCancelled() {
 	GetCharacterMovement()->GroundFriction = 8.f;	
-	canDash = true;
 	isDashing = false;
 }
 
 void ADragonCharacter::PlayerDashCompleted() {
 	GetCharacterMovement()->GroundFriction = 8.f;	
-	canDash = true;
 	isDashing = false;
 }
 
@@ -137,6 +137,7 @@ void ADragonCharacter::PlayerDie() {
 	
 	if (GetActorLocation().Z > -20.f) return;
 	if (lives > 0.f) return;
-	UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
+	//UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
+	UGameplayStatics::LoadStreamLevel(this, FName("DeathMenu"), true, true, FLatentActionInfo());
 }
 
