@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
+#include "EnemyAIController.h"
 
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
