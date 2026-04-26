@@ -50,6 +50,7 @@ public:
 	void PlayerMove(const FInputActionValue& ActionValue);
 	void PlayerJump();
 	void PlayerAttack();
+	void PlayerAttackEnd();
 	void PlayerDash();
 	void PlayerDashEnd();
 	void PlayerDashStarted();
@@ -63,18 +64,20 @@ public:
 	bool inBossFight;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool canHaveSword = false;
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
+	bool isAttacking;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
 	bool canDash = true;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
 	bool isDashing = false;
-	
-	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
+
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	float lives = 1.f;
-	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	float maxLives = 10.f;
 	
 	//Camera
-	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadWrite)
 	AActor* FollowCamera;
 	
 	//Weapon

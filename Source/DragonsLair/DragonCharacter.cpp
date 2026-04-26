@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "FollowCamera.h"
+#include "Rendering/RenderCommandPipes.h"
 
 // Sets default values
 ADragonCharacter::ADragonCharacter()
@@ -67,6 +68,8 @@ void ADragonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerMove);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerJump);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerAttack);
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ADragonCharacter::PlayerAttackEnd);
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &ADragonCharacter::PlayerAttackEnd);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerDash);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ADragonCharacter::PlayerDashStarted);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Canceled, this, &ADragonCharacter::PlayerDashCancelled);
@@ -100,7 +103,16 @@ void ADragonCharacter::PlayerJump() {
 
 void ADragonCharacter::PlayerAttack() {
 	
+	if (canHaveSword) {
+		isAttacking = true;		
+	}
 	
+	GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &ThisClass::PlayerAttackEnd, 1.f, false);
+}
+
+void ADragonCharacter::PlayerAttackEnd() {
+	
+	isAttacking = false;
 }
 
 //Player Dash
@@ -117,6 +129,7 @@ void ADragonCharacter::PlayerDash() {
 void ADragonCharacter::PlayerDashEnd() {
 	isDashing = false;
 	canDash = true;
+	GetCharacterMovement()->GroundFriction = 8.f;
 }
 
 void ADragonCharacter::PlayerDashStarted() {
@@ -137,7 +150,6 @@ void ADragonCharacter::PlayerDie() {
 	
 	if (GetActorLocation().Z > -20.f) return;
 	if (lives > 0.f) return;
-	//UGameplayStatics::OpenLevel(GetWorld(), FName("DeathMenu"));
 	UGameplayStatics::LoadStreamLevel(this, FName("DeathMenu"), true, true, FLatentActionInfo());
 }
 
