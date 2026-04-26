@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "EnemyCharacter.generated.h"
 #include "EnemyAIController.h"
+#include "EnemyCharacter.generated.h"
+
 
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
@@ -53,8 +54,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Combat")
     float AttackCooldown = 1.5f;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Combat")
-    TSubclassOf<UDamageType> DamageTypeClass;
   
     // State
 

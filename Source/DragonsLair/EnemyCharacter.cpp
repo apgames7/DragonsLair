@@ -1,22 +1,18 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyCharacter.h"
+#include "EnemyAIController.h"
 #include "HealthComponent.h"
 
-#include "Animation/AnimMontage.h"
-#include "Animation/AnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 #include "DrawDebugHelpers.h"
 
-// Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = true;
 
     bUseControllerRotationYaw = false;
     bUseControllerRotationPitch = false;
@@ -66,8 +62,6 @@ void AEnemyCharacter::Tick(float DeltaTime)
     DrawDebugSphere(GetWorld(), GetActorLocation(), AttackRadius, 16, FColor::Red, false, -1.f, 0, 1.f);
 #endif
 }
-
-// State machine
 
 void AEnemyCharacter::UpdateState(float DeltaTime)
 {
@@ -128,8 +122,6 @@ void AEnemyCharacter::SetState(EEnemyState NewState)
     }
 }
 
-// Rotation
-
 void AEnemyCharacter::RotateTowardsPlayer(float DeltaTime, const FVector& PlayerLocation)
 {
     const FRotator Current = GetActorRotation();
@@ -145,14 +137,10 @@ void AEnemyCharacter::RotateTowardsPlayer(float DeltaTime, const FVector& Player
     SetActorRotation(NewRot);
 }
 
-// Helpers
-
 APawn* AEnemyCharacter::GetPlayerPawn() const
 {
     return UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 }
-
-// Events
 
 void AEnemyCharacter::OnEnterIdle()
 {
@@ -161,7 +149,6 @@ void AEnemyCharacter::OnEnterIdle()
 
 void AEnemyCharacter::OnEnterChase()
 {
-    // Nothing needed — movement is driven by AddMovementInput in UpdateState
 }
 
 void AEnemyCharacter::OnEnterAttack()
@@ -178,7 +165,7 @@ void AEnemyCharacter::PerformAttack()
         AttackDamage,
         GetController(),
         this,
-        DamageTypeClass ? DamageTypeClass : UDamageType::StaticClass()
+        UDamageType::StaticClass()
     );
 }
 

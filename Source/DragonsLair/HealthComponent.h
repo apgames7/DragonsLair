@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -21,22 +21,8 @@ class DRAGONSLAIR_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UHealthComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-    float MaxHealth = 100.f;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-    float CurrentHealth = 100.f;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-    bool bIsDead = false;
+    public:
+    UHealthComponent();
 
     UPROPERTY(BlueprintAssignable, Category = "Health|Events")
     FOnHealthChanged OnHealthChanged;
@@ -44,17 +30,29 @@ protected:
     UPROPERTY(BlueprintAssignable, Category = "Health|Events")
     FOnDeath OnDeath;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+    bool bIsDead = false;
+
     UFUNCTION(BlueprintCallable, Category = "Health")
     void Heal(float Amount);
 
     UFUNCTION(BlueprintPure, Category = "Health")
     float GetHealthPercent() const { return (MaxHealth > 0.f) ? CurrentHealth / MaxHealth : 0.f; }
 
+protected:
+    virtual void BeginPlay() override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+    float MaxHealth = 100.f;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+    float CurrentHealth = 100.f;
+
 private:
     UFUNCTION()
     void HandleTakeAnyDamage(
         AActor* DamagedActor,
-        float              Damage,
+        float Damage,
         const UDamageType* DamageType,
         AController* InstigatedBy,
         AActor* DamageCauser

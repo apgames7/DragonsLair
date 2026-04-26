@@ -7,7 +7,7 @@
 #include "EnemyAIController.generated.h"
 
 UCLASS()
-class YOURGAME_API AEnemyAIController : public AAIController
+class DRAGONSLAIR_API AEnemyAIController : public AAIController
 {
     GENERATED_BODY()
 
