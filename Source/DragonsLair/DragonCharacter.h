@@ -68,7 +68,7 @@ public:
 	bool canDash = true;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
 	bool isDashing = false;
-	UPROPERTY(EditAnywhere, Category = "Player");
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
 	bool isAttacking = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite);
