@@ -153,3 +153,4 @@ void ADragonCharacter::PlayerDie() {
 	UGameplayStatics::LoadStreamLevel(this, FName("DeathMenu"), true, true, FLatentActionInfo());
 }
 
+//Comment
