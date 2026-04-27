@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#include "EnemyCharacter.h"
+﻿#include "EnemyCharacter.h"
 #include "EnemyAIController.h"
 #include "HealthComponent.h"
 
@@ -69,35 +67,36 @@ void AEnemyCharacter::UpdateState(float DeltaTime)
 
     const FVector EnemyLoc = GetActorLocation();
     const FVector PlayerLoc = PlayerPawn->GetActorLocation();
-    const float   DistSq = FVector::DistSquared(EnemyLoc, PlayerLoc);
-    const float   DetectSq = DetectionRadius * DetectionRadius;
-    const float   AttackSq = AttackRadius * AttackRadius;
+
+    const float DistX = FMath::Abs(PlayerLoc.X - EnemyLoc.X);
+    const float DetectX = DetectionRadius;
+    const float AttackX = AttackRadius;
 
     switch (CurrentState)
     {
     case EEnemyState::Idle:
-        if (DistSq <= DetectSq)
+        if (DistX <= DetectX)
             SetState(EEnemyState::Chase);
         break;
 
     case EEnemyState::Chase:
-        if (DistSq > DetectSq)
+        if (DistX > DetectX)
             SetState(EEnemyState::Idle);
-        else if (DistSq <= AttackSq)
+        else if (DistX <= AttackX)
             SetState(EEnemyState::Attack);
         else
         {
-            RotateTowardsPlayer(DeltaTime, PlayerLoc);
-            AddMovementInput((PlayerLoc - EnemyLoc).GetSafeNormal());
+            FacePlayer(PlayerLoc, EnemyLoc);
+            MoveAlongX(EnemyLoc, PlayerLoc, DeltaTime);
         }
         break;
 
     case EEnemyState::Attack:
-        if (DistSq > AttackSq)
+        if (DistX > AttackX)
             SetState(EEnemyState::Chase);
         else
         {
-            RotateTowardsPlayer(DeltaTime, PlayerLoc);
+            FacePlayer(PlayerLoc, EnemyLoc);
 
             if (AttackCooldownRemaining <= 0.f)
             {
@@ -122,19 +121,35 @@ void AEnemyCharacter::SetState(EEnemyState NewState)
     }
 }
 
-void AEnemyCharacter::RotateTowardsPlayer(float DeltaTime, const FVector& PlayerLocation)
+void AEnemyCharacter::FacePlayer(const FVector& PlayerLoc, const FVector& EnemyLoc)
 {
-    const FRotator Current = GetActorRotation();
-    const FRotator Target = (PlayerLocation - GetActorLocation()).GetSafeNormal().Rotation();
+    const float DirectionX = PlayerLoc.X - EnemyLoc.X;
+    SetActorRotation(FRotator(0.f, DirectionX > 0.f ? 0.f : 180.f, 0.f));
+}
 
-    const FRotator NewRot = FMath::RInterpTo(
-        FRotator(0.f, Current.Yaw, 0.f),
-        FRotator(0.f, Target.Yaw, 0.f),
-        DeltaTime,
-        RotationInterpSpeed
+void AEnemyCharacter::MoveAlongX(const FVector& EnemyLoc, const FVector& PlayerLoc, float DeltaTime)
+{
+    const float DirectionX = (PlayerLoc.X - EnemyLoc.X) > 0.f ? 1.f : -1.f;
+
+    FHitResult Hit;
+    FVector TraceStart = EnemyLoc;
+    FVector TraceEnd = EnemyLoc + FVector(DirectionX * 60.f, 0.f, 0.f);
+
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(this);
+
+    const bool bHitWall = GetWorld()->LineTraceSingleByChannel(
+        Hit,
+        TraceStart,
+        TraceEnd,
+        ECC_WorldStatic,
+        Params
     );
 
-    SetActorRotation(NewRot);
+    if (!bHitWall)
+    {
+        AddMovementInput(FVector(DirectionX, 0.f, 0.f));
+    }
 }
 
 APawn* AEnemyCharacter::GetPlayerPawn() const
@@ -173,5 +188,5 @@ void AEnemyCharacter::OnDied(AActor* DeadActor)
 {
     GetCharacterMovement()->DisableMovement();
     SetActorEnableCollision(false);
-    SetLifeSpan(2.f);
+    OnBossDied();
 }

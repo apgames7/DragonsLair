@@ -1,37 +1,30 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "EnemyAIController.h"
 #include "EnemyCharacter.generated.h"
-
 
 UENUM(BlueprintType)
 enum class EEnemyState : uint8
 {
-	Idle    UMETA(DisplayName = "Idle"),
-	Chase   UMETA(DisplayName = "Chase"),
-	Attack  UMETA(DisplayName = "Attack")
+    Idle    UMETA(DisplayName = "Idle"),
+    Chase   UMETA(DisplayName = "Chase"),
+    Attack  UMETA(DisplayName = "Attack")
 };
 
 UCLASS()
 class DRAGONSLAIR_API AEnemyCharacter : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AEnemyCharacter();
+    AEnemyCharacter();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    virtual void Tick(float DeltaTime) override;
 
     // Detection
 
@@ -41,12 +34,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Detection")
     float AttackRadius = 200.f;
 
-    // Movement 
+    // Movement
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Movement")
     float RotationInterpSpeed = 8.f;
 
-    // Combat 
+    // Combat
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Combat")
     float AttackDamage = 20.f;
@@ -54,7 +47,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Combat")
     float AttackCooldown = 1.5f;
 
-  
     // State
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI|State")
@@ -64,6 +56,11 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     class UHealthComponent* HealthComponent;
+
+    // Blueprint Events
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "AI|Events")
+    void OnBossDied();
 
 protected:
     virtual void OnEnterIdle();
@@ -77,7 +74,8 @@ protected:
 private:
     void UpdateState(float DeltaTime);
     void SetState(EEnemyState NewState);
-    void RotateTowardsPlayer(float DeltaTime, const FVector& PlayerLocation);
+    void FacePlayer(const FVector& PlayerLoc, const FVector& EnemyLoc);
+    void MoveAlongX(const FVector& EnemyLoc, const FVector& PlayerLoc, float DeltaTime);
     APawn* GetPlayerPawn() const;
 
     UPROPERTY()
