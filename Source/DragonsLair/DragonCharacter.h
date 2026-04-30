@@ -34,7 +34,7 @@ public:
 	//Controller
 	UPROPERTY(EditAnywhere, Category = "Input");
 	UInputMappingContext* MappingContext;
-	
+
 	UPROPERTY(EditAnywhere, Category = "Input");
 	UInputAction* MoveAction;
 	
