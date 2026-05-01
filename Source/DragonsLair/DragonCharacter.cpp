@@ -68,8 +68,6 @@ void ADragonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerMove);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerJump);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerAttack);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ADragonCharacter::PlayerAttackEnd);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Canceled, this, &ADragonCharacter::PlayerAttackEnd);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ADragonCharacter::PlayerDash);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ADragonCharacter::PlayerDashStarted);
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Canceled, this, &ADragonCharacter::PlayerDashCancelled);
@@ -121,7 +119,8 @@ void ADragonCharacter::PlayerDash() {
 	if (canDash) {
 		canDash = false;
 		GetCharacterMovement()->GroundFriction = 0.f;
-		GetCharacterMovement()->AddImpulse(GetMesh()->GetForwardVector().RotateAngleAxis(90.f, {0, 0, 1}) * FVector3d{1500.f, 1500.f, 1500.f}, true);
+		GetCharacterMovement()->AddImpulse(GetMesh()->GetForwardVector().
+			RotateAngleAxis(90.f, {0, 0, 1}) * FVector3d{1500.f, 1500.f, 1500.f}, true);
 		GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &ThisClass::PlayerDashEnd, 3.f, false);
 	}	
 }
