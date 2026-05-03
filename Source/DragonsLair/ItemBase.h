@@ -1,27 +1,46 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "ItemBase.generated.h"
 
-UCLASS()
+class USphereComponent;
+class ABP_DragonPlayer;
+
+UCLASS(Blueprintable)
 class DRAGONSLAIR_API AItemBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	AItemBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere, Category = "Collision")
+	USphereComponent* Collision;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float FloatAmplitude = 20.f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float FloatSpeed = 1.f;
+
+	FVector StartLocation;
+
+	// Blueprint will implement this
+	UFUNCTION(BlueprintImplementableEvent, Category = "Item")
+	void ApplyEffect(ABP_DragonPlayer* Player);
+
+	UFUNCTION()
+	void OnOverlapBegin(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
 };
