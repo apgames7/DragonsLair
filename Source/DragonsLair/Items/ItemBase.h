@@ -3,9 +3,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
+#include "DragonCharacter.h"
 
 class USphereComponent;
-class ABP_DragonPlayer;
+class ADragonCharacter;
 
 UCLASS(Blueprintable)
 class DRAGONSLAIR_API AItemBase : public AActor
@@ -32,7 +33,7 @@ protected:
 
 	// Blueprint will implement this
 	UFUNCTION(BlueprintImplementableEvent, Category = "Item")
-	void ApplyEffect(ABP_DragonPlayer* Player);
+	void ApplyEffect(ADragonCharacter* Player);
 
 	UFUNCTION()
 	void OnOverlapBegin(

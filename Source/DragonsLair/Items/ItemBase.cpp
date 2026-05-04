@@ -1,6 +1,6 @@
 #include "ItemBase.h"
 #include "Components/SphereComponent.h"
-#include "BP_DragonPlayer.h"
+#include "DragonCharacter.h"
 
 AItemBase::AItemBase()
 {
@@ -45,11 +45,16 @@ void AItemBase::OnOverlapBegin(
 	const FHitResult& SweepResult
 )
 {
-	ABP_DragonPlayer* Player = Cast<ABP_DragonPlayer>(OtherActor);
-	if (!Player) return;
+	// Ensure OtherActor is of type ADragonCharacter
+	ADragonCharacter* Player = Cast<ADragonCharacter>(OtherActor);
 
-	// Call Blueprint logic
-	ApplyEffect(Player);
+	// If the player exists, call the ApplyEffect function
+	if (Player)
+	{
+		// Call Blueprint logic
+		ApplyEffect(Player);
 
-	Destroy();
+		// Destroy the item after it is used
+		Destroy();
+	}
 }
