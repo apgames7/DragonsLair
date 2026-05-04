@@ -6,7 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "FollowCamera.h"
+#include "DragonsLair/Camera/FollowCamera.h"
 
 // Sets default values
 ADragonCharacter::ADragonCharacter()

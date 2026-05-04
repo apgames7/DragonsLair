@@ -2,12 +2,11 @@
 
 
 #include "EnemyBackupCharacter.h"
-
-#include "DragonCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/SphereComponent.h"
+#include "DragonsLair/Player/DragonCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DragonCharacter.h"
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
