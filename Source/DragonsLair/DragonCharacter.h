@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputMappingContext.h"
+#include "Components/BoxComponent.h"
 #include "DragonCharacter.generated.h"
 
 class UCameraComponent;
@@ -31,6 +32,19 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 	
+	//Actions	
+	void PlayerMove(const FInputActionValue& ActionValue);
+	void PlayerJump();
+	void PlayerDash();
+	void PlayerDashEnd();
+	void PlayerDashStarted();
+	void PlayerDashCancelled();
+	void PlayerDashCompleted();
+	
+	void PlayerAttack();
+	void PlayerAttackEnd();
+	void PlayerDie(); //Restarts level under certain conditons.
+	
 	//Controller
 	UPROPERTY(EditAnywhere, Category = "Input");
 	UInputMappingContext* MappingContext;
@@ -47,34 +61,25 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input");
 	UInputAction* DashAction;
 	
-	void PlayerMove(const FInputActionValue& ActionValue);
-	void PlayerJump();
-	void PlayerAttack();
-	void PlayerAttackEnd();
-	void PlayerDash();
-	void PlayerDashEnd();
-	void PlayerDashStarted();
-	void PlayerDashCancelled();
-	void PlayerDashCompleted();
-	
-	void PlayerDie(); //Restarts level under certain conditons.
-	
-	//Player
+	//Movement
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
+	bool canDash = true;
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
+	bool isDashing = false;
+
+	//Combat
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool inBossFight;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool canHaveSword = false;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	bool isAttacking;
-	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
-	bool canDash = true;
-	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)	
-	bool isDashing = false;
-
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	float lives = 1.f;
 	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
 	float maxLives = 10.f;
+	UPROPERTY(EditAnywhere, Category = "Player", BlueprintReadWrite)
+	UBoxComponent* hitBox;
 	
 	//Camera
 	UPROPERTY(EditAnywhere, Category = "Camera", BlueprintReadWrite)

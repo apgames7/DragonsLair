@@ -7,7 +7,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "FollowCamera.h"
-#include "Rendering/RenderCommandPipes.h"
 
 // Sets default values
 ADragonCharacter::ADragonCharacter()
@@ -17,6 +16,7 @@ ADragonCharacter::ADragonCharacter()
 	
 	GetMesh()->SetRelativeRotation(FRotator{0.f, -90.f, 0.f});
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon");
+	hitBox = CreateDefaultSubobject<UBoxComponent>("HitBox");
 	WeaponMesh->SetRelativeRotation(FRotator{0.f, -90.f, 0.f});
 	WeaponMesh->SetupAttachment(GetMesh());
 
