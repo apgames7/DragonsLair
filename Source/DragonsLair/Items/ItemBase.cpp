@@ -1,6 +1,6 @@
 #include "ItemBase.h"
 #include "Components/SphereComponent.h"
-#include "DragonCharacter.h"
+#include "DragonsLair/Player/DragonCharacter.h"
 
 AItemBase::AItemBase()
 {

@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DragonsLair/Player/DragonCharacter.h"
 #include "ItemBase.generated.h"
-#include "DragonCharacter.h"
+
 
 class USphereComponent;
 class ADragonCharacter;
