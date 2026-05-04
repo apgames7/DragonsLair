@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "DragonsLair/Player/DragonCharacter.h"
 #include "EnemyBackupCharacter.generated.h"
 
 UCLASS()
