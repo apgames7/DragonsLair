@@ -2,9 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "DragonsLair/Player/DragonCharacter.h"
 #include "ItemBase.generated.h"
-
 
 class USphereComponent;
 class ADragonCharacter;
@@ -21,21 +19,28 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Collision")
+	// Components 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 	USphereComponent* Collision;
 
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	// Movement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float FloatAmplitude = 20.f;
 
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float FloatSpeed = 1.f;
 
 	FVector StartLocation;
 
-	// Blueprint will implement this
+	// Item behavior
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+	bool bDestroyOnPickup = true;
+
+	// Blueprint-defined effect (implemented per item)
 	UFUNCTION(BlueprintImplementableEvent, Category = "Item")
 	void ApplyEffect(ADragonCharacter* Player);
 
+	// Overlap handler
 	UFUNCTION()
 	void OnOverlapBegin(
 		UPrimitiveComponent* OverlappedComponent,
