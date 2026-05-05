@@ -49,7 +49,7 @@ void AEnemyBackupCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 void AEnemyBackupCharacter::Win() {
 	
-	if (ActorHasTag(FName("Boss")) && lives <= -1) UGameplayStatics::OpenLevel(GetWorld(), FName("WinMenu"), true);
+	if (ActorHasTag(FName("Boss")) && lives <= 0) UGameplayStatics::OpenLevel(GetWorld(), FName("WinMenu"), true);
 }
 
 void AEnemyBackupCharacter::Move() {

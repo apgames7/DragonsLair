@@ -151,5 +151,3 @@ void ADragonCharacter::PlayerDie() {
 	if (GetActorLocation().Z > -20.f && lives > 0.f) return;
 	UGameplayStatics::LoadStreamLevel(this, FName("DeathMenu"), true, true, FLatentActionInfo());
 }
-
-//Comment
